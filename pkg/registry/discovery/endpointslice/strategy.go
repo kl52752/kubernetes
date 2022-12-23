@@ -92,7 +92,11 @@ func (endpointSliceStrategy) Validate(ctx context.Context, obj runtime.Object) f
 
 // WarningsOnCreate returns warnings for the creation of the given object.
 func (endpointSliceStrategy) WarningsOnCreate(ctx context.Context, obj runtime.Object) []string {
-	return nil
+	eps := obj.(*discovery.EndpointSlice)
+	if eps == nil {
+		return nil
+	}
+	return validation.GetWarningsForEndpointSliceCreation(eps)
 }
 
 // Canonicalize normalizes the object after validation.
